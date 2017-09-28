@@ -1,0 +1,12 @@
+Simple Matrix Multiplication
+
+1.  How many times is each element of the input matrices loaded during the execution of the kernel?
+->>>> Suppose we have size = nxn matrices M and N, then say for a particular thread id 'i' when we compute row and col then we need to load  n values from the global memory to complete this computation i.e M(row(1),col)....M(row(n),col) and N(row,col(1))....N(row,col(n)).We do this for all the n elements.  
+	Thus, each element of the input matrix is loaded  exactly n times for size = nxn. 
+
+2.  What is the memory-access to floating-point computation ratio in each thread?  
+    Consider a multiply and addition as separate operations, and ignore the storing 
+    of the result.  Only global memory loads should be counted towards 
+    your off-chip bandwidth
+>>>>>>>>>>>  For each thread we have 1 multiplication and 1 addition operation. We know that there are total 2n memory accesses carried out as each element is loaded n times and we have 2 matrices in this operation. Now for the floating point operations we have (1 + 1)n total floating point computations. Now thus the ratio = 2n/2n = 1. 
+Therefore, the memory-access to floating point ratio is 1.     
