@@ -1,0 +1,20 @@
+Tiled Matrix Multiplication
+
+    In your kernel implementation, how many threads can be simultaneously executing
+    on a GeForce GTX 1080 GPU, which contains 20 Streaming Multiprocessors. Use
+    nvcc --ptxas-options="-v" matrixmul_kernel.cu to see the resource usage of 
+    your kernel (although compilation will fail, it will only do so after
+    compiling the kernel and displaying the relevant information.)
+
+
+
+
+Number of threads that can be executed simultaneously on the GTX1080 GPU :
+
+By using   nvcc --ptxas-options="-v" matrixmul_kernel.cu command we get the following results : 
+
+ptxas info    : Used 23 registers, 2048 bytes smem, 104 bytes cmem[0]
+
+So each SM here uses 23 registers, 2048 bytes of shared memory and 104 bytes if the constant memory 
+
+Since TILE_WIDTH here is 16, each thread block will have 16*16 = 256 threads. 
