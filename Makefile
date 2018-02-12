@@ -8,16 +8,23 @@ else
 endif
 
 LD_FLAGS    = -lcudart -L/usr/local/cuda/lib64
-EXE	        = scan_largearray
-OBJ	        = scan_largearray_cu.o scan_largearray_cpp.o
+EXE	        = histogram
+OBJ	        = histogram_cu.o harness.o ref.o util.o
 
 default: $(EXE)
 
-scan_largearray_cu.o: scan_largearray.cu scan_largearray_kernel.cu
-	$(NVCC) -c -o $@ scan_largearray.cu $(NVCC_FLAGS)
+histogram_cu.o: opt_2dhisto.cu opt_2dhisto.h ref_2dhisto.h
+	$(NVCC) -c -o $@ opt_2dhisto.cu $(NVCC_FLAGS)
 
-scan_largearray_cpp.o: scan_gold.cpp
-	$(NVCC) -c -o $@ scan_gold.cpp $(NVCC_FLAGS) 
+harness.o: test_harness.cpp util.cpp ref_2dhisto.cpp ref_2dhisto.h
+	$(NVCC) -c -o $@ test_harness.cpp $(NVCC_FLAGS) 
+
+ref.o: test_harness.cpp util.cpp ref_2dhisto.cpp ref_2dhisto.h
+	$(NVCC) -c -o $@ ref_2dhisto.cpp $(NVCC_FLAGS) 
+
+util.o: test_harness.cpp util.cpp ref_2dhisto.cpp ref_2dhisto.h
+	$(NVCC) -c -o $@ util.cpp $(NVCC_FLAGS) 
+
 
 $(EXE): $(OBJ)
 	$(NVCC) $(OBJ) -o $(EXE) $(LD_FLAGS) $(NVCC_FLAGS)
